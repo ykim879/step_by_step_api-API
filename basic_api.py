@@ -1,5 +1,5 @@
 import requests
-
+from bs4 import BeautifulSoup
 class apiExplantor:
 	'''
 	this explains the process of using API to retrieve data from the servers
@@ -15,7 +15,7 @@ class apiExplantor:
 		by using requests.get() method, we will get request object which contains data in json format
 		you can optionally use timeout to prevent being blocked indefinitely
 		'''
-        response = requests.get(url)
+        self.response = requests.get(url)
         '''
         this check the status, you can optionally use raise_for_status() to deal with all exceptions
         '''
@@ -28,6 +28,7 @@ class apiExplantor:
 
         '''
         resquest.json() method convert json file in dictionary,
+        since it is dictionary it is easy to convert to dataframe
         '''
         sources = response.json()['sources'] 
         print(response.json()['sources'][0])
@@ -36,3 +37,8 @@ class apiExplantor:
             self.sources[source['name']] = source['id']
 
         '''
+    def parsingWSoup(self):
+        self.soup = BeautifulSoup(self.response.content, "lxml")
+        for link in self.soup.find_all('a'):
+            print(link)
+            print(link['href'])

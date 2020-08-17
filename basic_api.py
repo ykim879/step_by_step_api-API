@@ -43,8 +43,10 @@ class apiExplantor:
 		'''
 	def parsingWDF(self):
 		self.df = pd.DataFrame(self.response.json()) #move it into __init__ later
-		self.df.drop(columns = ['status'], inplace = True)
+		self.df.drop(columns = ['status'], inplace = True) # the status columnn is true for every column so no longer needed
 		print(self.df)
+		'''The data frame is consisted of sources which is consisted of list so we are gonna put it into individual dataframe
+		'''
 	def parsingWSoup(self):
 		self.soup = BeautifulSoup(self.response.content, "lxml")
 		for link in self.soup.find_all('a'):

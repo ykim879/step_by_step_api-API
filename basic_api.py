@@ -42,3 +42,21 @@ class apiExplantor:
         for link in self.soup.find_all('a'):
             print(link)
             print(link['href'])
+
+    def getHeadlines(self, ID):
+        """
+        This procedure will take in the id and find the articles from the
+        source associated with that id. It then puts them into a list and puts
+        that list into a queue for processing.
+        """
+        url = ('https://newsapi.org/v2/top-headlines?sources=' + ID + 
+            '&apiKey=55b9f473b6e642ac862d315a124c6619')
+        response = requests.get(url)
+        json = response.json()
+        if json['status'] != 'ok':
+            raise IOError('API key is probably overused :(')
+        topNews = [] 
+        for elem in json['articles']:
+            label = elem['source']['name'] + ': ' + elem['title']
+            item = (label, elem['url'])
+            topNews.append(item)

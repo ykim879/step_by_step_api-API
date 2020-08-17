@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 class apiExplantor:
 	'''
 	this explains the process of using API to retrieve data from the servers
@@ -30,12 +31,20 @@ class apiExplantor:
 		since it is dictionary it is easy to convert to dataframe
 		'''
 		sources = self.response.json()
-		print(self.response.json())
+		#print(self.response.json())
+		self.parsingWDF()
 		'''
 		for source in sources:
 			self.sources[source['name']] = source['id']
 
 		'''
+		'''
+		this method will convert data into DataFrame which will be easier to view
+		'''
+	def parsingWDF(self):
+		self.df = pd.DataFrame(self.response.json()) #move it into __init__ later
+		self.df.drop(columns = ['status'], inplace = True)
+		print(self.df)
 	def parsingWSoup(self):
 		self.soup = BeautifulSoup(self.response.content, "lxml")
 		for link in self.soup.find_all('a'):

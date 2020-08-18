@@ -47,11 +47,33 @@ class apiExplantor:
 		print(self.df)
 		'''The data frame is consisted of sources which is consisted of list so we are gonna put it into individual dataframe
 		'''
+		self.df_id = pd.DataFrame();
+		self.sources = self.response.json()['sources']
+		for source in self.sources:
+			row = pd.Series(source)
+			self.df_id = self.df_id.append(row, ignore_index = True)
+		self.df_id.set_index('name', inplace = True)
+		print(self.df_id.columns)
+		print(self.df_id)
+		self.seeColumns()
+		self.analyzeCategory()
+
 	def parsingWSoup(self):
 		self.soup = BeautifulSoup(self.response.content, "lxml")
 		for link in self.soup.find_all('a'):
 			print(link)
 			print(link['href'])
+
+	def seeColumns(self):
+		for index in self.df_id.columns:
+			print(index)
+			print(self.df_id[index])
+	
+	def analyzeCategory(self):
+		response = self.df_id['category'].value_counts()
+		print(response)
+		group = self.df_id.groupby(['category'])
+		print(group['id'].value_counts())
 
 	def getHeadlines(self, ID):
 		"""

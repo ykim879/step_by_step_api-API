@@ -1,7 +1,8 @@
+import parsingWDF
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import parsingWDF
+
 class apiExplantor:
 	'''
 	this explains the process of using API to retrieve data from the servers
@@ -32,7 +33,7 @@ class apiExplantor:
 		since it is dictionary it is easy to convert to dataframe
 		'''
 		sources = self.response.json()
-		pdf = parsingWDF(self.response)
+		pdf = parsingWDF.parsingWDF(self.response)
 
 	def parsingWSoup(self):
 		self.soup = BeautifulSoup(self.response.content, "lxml")

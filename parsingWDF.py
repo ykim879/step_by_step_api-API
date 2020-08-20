@@ -7,8 +7,9 @@ class parsingWDF:
 	'''
 	def __init__(self, response):
 		self.response = response
+		sources = response.json()['sources']
 		self.df_id = pd.DataFrame();
-		for source in self.sources:
+		for source in sources:
 			row = pd.Series(source)
 			self.df_id = self.df_id.append(row, ignore_index = True)
 		self.df_id.set_index('name', inplace = True)

@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import parsingWDF
 class apiExplantor:
 	'''
 	this explains the process of using API to retrieve data from the servers
@@ -31,49 +32,13 @@ class apiExplantor:
 		since it is dictionary it is easy to convert to dataframe
 		'''
 		sources = self.response.json()
-		#print(self.response.json())
-		self.parsingWDF()
-		'''
-		for source in sources:
-			self.sources[source['name']] = source['id']
-
-		'''
-		'''
-		this method will convert data into DataFrame which will be easier to view
-		'''
-	def parsingWDF(self):
-		self.df = pd.DataFrame(self.response.json()) #move it into __init__ later
-		self.df.drop(columns = ['status'], inplace = True) # the status columnn is true for every column so no longer needed
-		print(self.df)
-		'''The data frame is consisted of sources which is consisted of list so we are gonna put it into individual dataframe
-		'''
-		self.df_id = pd.DataFrame();
-		self.sources = self.response.json()['sources']
-		for source in self.sources:
-			row = pd.Series(source)
-			self.df_id = self.df_id.append(row, ignore_index = True)
-		self.df_id.set_index('name', inplace = True)
-		print(self.df_id.columns)
-		print(self.df_id)
-		self.seeColumns()
-		self.analyzeCategory()
+		pdf = parsingWDF(self.response)
 
 	def parsingWSoup(self):
 		self.soup = BeautifulSoup(self.response.content, "lxml")
 		for link in self.soup.find_all('a'):
 			print(link)
 			print(link['href'])
-
-	def seeColumns(self):
-		for index in self.df_id.columns:
-			print(index)
-			print(self.df_id[index])
-	
-	def analyzeCategory(self):
-		response = self.df_id['category'].value_counts()
-		print(response)
-		group = self.df_id.groupby(['category'])
-		print(group['id'].value_counts())
 
 	def getHeadlines(self, ID):
 		"""
